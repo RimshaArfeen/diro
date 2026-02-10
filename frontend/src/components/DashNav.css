@@ -1,0 +1,107 @@
+.profile-dropdown {
+  position: absolute;
+  top: 54px;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #eef0f3;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  width: 260px;
+  z-index: 200;
+  padding: 8px 0;
+  animation: pdFadeIn 0.15s ease;
+}
+
+@keyframes pdFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pd-header {
+  padding: 16px 20px 12px;
+}
+
+.pd-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #6b7685;
+  letter-spacing: 1.5px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.pd-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 2px;
+}
+
+.pd-email {
+  font-size: 0.78rem;
+  color: #9aa3ae;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pd-divider {
+  height: 1px;
+  background: #eef0f3;
+  margin: 4px 0;
+}
+
+.pd-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.12s;
+  background: none;
+  border: none;
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+  gap: 8px;
+}
+
+.pd-item:hover {
+  background: #f8f8f8;
+}
+
+.pd-arrow {
+  font-size: 0.75rem;
+  color: #9aa3ae;
+}
+
+.pd-logout {
+  color: #1a1a1a;
+}
+
+.pd-footer {
+  display: flex;
+  gap: 12px;
+  padding: 10px 20px 8px;
+  flex-wrap: wrap;
+}
+
+.pd-footer a {
+  font-size: 0.72rem;
+  color: #9aa3ae;
+  text-decoration: none;
+}
+
+.pd-footer a:hover {
+  color: #6b7685;
+}
+
+.dash-user {
+  position: relative;
+}
+

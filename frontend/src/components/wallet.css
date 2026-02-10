@@ -1,0 +1,133 @@
+.wallet-page {
+  min-height: calc(100vh - 80px);
+  padding: 2rem;
+  background: #f0fff0;
+}
+
+.wallet-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.wallet-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 2rem;
+}
+
+.balance-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.balance-card {
+  background: #fff;
+  border: 1px solid rgba(144, 238, 144, 0.4);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(144, 238, 144, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.balance-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(50, 205, 50, 0.2);
+}
+
+.balance-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.balance-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin: 0 0 0.5rem;
+}
+
+.balance-amount {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #228B22;
+  margin: 0;
+}
+
+.withdraw-btn {
+  width: 100%;
+  padding: 1rem;
+  background: #32CD32;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+  margin-bottom: 2rem;
+}
+
+.withdraw-btn:hover {
+  background: #228B22;
+  transform: translateY(-2px);
+}
+
+.transactions-section h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 1rem;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(144, 238, 144, 0.15);
+}
+
+.transactions-table th,
+.transactions-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(144, 238, 144, 0.3);
+}
+
+.transactions-table th {
+  background: lightgreen;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.transactions-table tr:last-child td {
+  border-bottom: none;
+}
+
+.transactions-table tr:hover {
+  background: #f0fff0;
+}
+
+.transactions-table .earning {
+  color: #228B22;
+  font-weight: 600;
+}
+
+.transactions-table .withdrawal {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .wallet-page { padding: 1rem; }
+  .wallet-title { font-size: 1.5rem; }
+  .balance-amount { font-size: 1.5rem; }
+  .transactions-table th,
+  .transactions-table td { padding: 0.75rem 0.5rem; font-size: 0.875rem; }
+}
+

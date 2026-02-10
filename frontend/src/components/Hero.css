@@ -1,0 +1,128 @@
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #eaf4fb 0%, #d4ecfa 40%, #c3e4f7 100%);
+  padding: 120px 24px 80px;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-title {
+  font-size: 4.2rem;
+  line-height: 1.1;
+  margin: 0 0 28px;
+  letter-spacing: -1.5px;
+}
+
+.hero-title .bold {
+  color: #1a1a1a;
+  font-weight: 900;
+}
+
+.hero-title .light {
+  color: #b0b8c1;
+  font-weight: 800;
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: #5a6572;
+  margin: 0 0 16px;
+  font-weight: 400;
+}
+
+.trust-badges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 42px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e6ea;
+  border-radius: 50px;
+  padding: 8px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.badge-icon {
+  font-size: 1.1rem;
+}
+
+.badge-separator {
+  color: #b0b8c1;
+  font-size: 1rem;
+}
+
+.trust-more {
+  color: #7a8694;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.cta-button {
+  background: #38b6e8;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 64px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(56, 182, 232, 0.3);
+  letter-spacing: 0.3px;
+}
+
+.cta-button:hover {
+  background: #2da8d8;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(56, 182, 232, 0.4);
+}
+
+.cta-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.6rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .cta-button {
+    padding: 16px 48px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero {
+    padding: 100px 16px 60px;
+  }
+}
+
