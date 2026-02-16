@@ -1,5 +1,5 @@
 module.exports = {
-  mongoURI: process.env.MONGODB_URI || 'mongodb://localhost:27017/diro',
+  mongoURI: process.env.mongoURI || 'mongodb://localhost:27017/diro',
   jwtSecret: process.env.JWT_SECRET || 'default-secret-key-change-in-production',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
   bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS) || 10,

@@ -5,7 +5,7 @@
 
 const mongoose = require('mongoose');
 
-const TEST_DB_URI = process.env.TEST_MONGODB_URI || 'mongodb://localhost:27017/diro_test';
+const TEST_DB_URI = process.env.TEST_mongoURI || 'mongodb://localhost:27017/diro_test';
 
 module.exports = {
   connect: async () => {
