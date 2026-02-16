@@ -126,7 +126,7 @@ function BrandSettings() {
   return (
     <div className="dash">
       <nav className="dash-nav">
-        <Link to="/brand-dashboard" className="dash-logo">DIRO <span className="dash-beta brand-beta">BRAND</span></Link>
+        <Link to="/brand-dashboard" className="dash-logo">CLYPZY <span className="dash-beta brand-beta">BRAND</span></Link>
         <div className="dash-tabs">
           <Link to="/brand-dashboard" className="dash-tab"><span className="tab-icon"><FiBarChart2 size={14} /></span> Dashboard</Link>
           <span className="dash-tab active"><span className="tab-icon"><FiSettings size={14} /></span> Settings</span>
@@ -423,7 +423,7 @@ function BrandSettings() {
                 <div className="delete-icon"><FiAlertTriangle size={20} /></div>
                 <div>
                   <span className="delete-title">Delete brand account</span>
-                  <span className="delete-desc">Permanently delete your Diro brand account and all campaigns.</span>
+                  <span className="delete-desc">Permanently delete your Clypzy brand account and all campaigns.</span>
                 </div>
                 <button className="delete-btn" onClick={handleDelete}><FiTrash2 size={14} style={{ marginRight: 4 }} /> Delete</button>
               </div>

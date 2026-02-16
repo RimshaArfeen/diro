@@ -497,7 +497,7 @@ function Settings() {
                 <div className="delete-icon"><FiAlertTriangle size={20} /></div>
                 <div>
                   <span className="delete-title">Delete account</span>
-                  <span className="delete-desc">Permanently delete your Diro account.</span>
+                  <span className="delete-desc">Permanently delete your Clypzy account.</span>
                 </div>
                 <button className="delete-btn" onClick={handleDelete}><FiTrash2 size={14} style={{ marginRight: 4 }} /> Delete</button>
               </div>

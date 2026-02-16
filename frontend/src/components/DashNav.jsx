@@ -19,7 +19,7 @@ function DashNav({ active }) {
 
   return (
     <nav className="dash-nav">
-      <Link to="/dashboard" className="dash-logo">DIRO <span className="dash-beta">BETA</span></Link>
+      <Link to="/dashboard" className="dash-logo">CLYPZY <span className="dash-beta">BETA</span></Link>
       <div className="dash-tabs">
         <Link to="/dashboard" className={`dash-tab ${active === 'home' ? 'active' : ''}`}>
           <span className="tab-icon"><FiHome size={14} /></span>

@@ -161,7 +161,7 @@ function Dashboard() {
 
         <div className="dash-topclips">
           <h2 className="stats-heading">Top clips</h2>
-          <p className="stats-sub">Your most viewed Diro clips</p>
+          <p className="stats-sub">Your most viewed Clypzy clips</p>
           <div className="topclips-grid">
             {topClips.map(clip => {
               const camp = campaigns.find(c => c.id === clip.campaignId)

@@ -37,7 +37,7 @@ function AdminLogin() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">DIRO</div>
+        <div className="auth-logo">CLYPZY</div>
         <h1 className="auth-title">Admin Login</h1>
         <p className="auth-subtitle">Sign in to the admin panel</p>
         {error && <p style={{ color: '#e53e3e', fontSize: '0.85rem', marginBottom: 16 }}>{error}</p>}

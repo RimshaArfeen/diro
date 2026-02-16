@@ -61,8 +61,8 @@ function Signup() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">DIRO</div>
-        <h1 className="auth-title">Sign up for Diro</h1>
+        <div className="auth-logo">CLYPZY</div>
+        <h1 className="auth-title">Sign up for Clypzy</h1>
         <p className="auth-subtitle">
           Already have an account? <Link to="/login" className="auth-link">Log in</Link>
         </p>

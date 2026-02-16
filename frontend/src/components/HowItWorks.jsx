@@ -27,7 +27,7 @@ const HowItWorks = () => {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="hero-title">How DIRO Works</h1>
+          <h1 className="hero-title">How CLYPZY Works</h1>
           <p className="hero-subtitle">
             Brands launch campaigns. Creators make clips. Everyone wins.
           </p>
@@ -137,7 +137,7 @@ const HowItWorks = () => {
         <div className="section-container">
           <h2 className="cta-title">Ready to Get Started?</h2>
           <p className="cta-description">
-            Join thousands of brands and creators already using DIRO.
+            Join thousands of brands and creators already using CLYPZY.
           </p>
           <div className="cta-buttons">
             <a href="/signup" className="cta-btn cta-primary">Create Account</a>

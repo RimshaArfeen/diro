@@ -45,7 +45,7 @@ const Navbar = () => {
       <div className="navbar-container">
         {/* Logo / Brand */}
         <NavLink to="/" className="navbar-brand" onClick={closeMenu}>
-          <img src={logo} alt="DIRO Logo" className="navbar-logo" />
+          <img src={logo} alt="CLYPZY Logo" className="navbar-logo" />
         </NavLink>
 
         {/* Desktop Navigation Links */}

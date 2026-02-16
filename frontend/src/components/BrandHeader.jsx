@@ -87,7 +87,7 @@ const BrandHeader = () => {
         {/* Left — Logo */}
         <div className="bh-left">
           <NavLink to="/brand/dashboard" className="bh-brand">
-            <img src={logo} alt="DIRO" className="bh-brand-logo" />
+            <img src={logo} alt="CLYPZY" className="bh-brand-logo" />
             <span className="bh-brand-badge">Brand</span>
           </NavLink>
         </div>

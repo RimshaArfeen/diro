@@ -60,8 +60,8 @@ function Login() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">DIRO</div>
-        <h1 className="auth-title">Log in to Diro</h1>
+        <div className="auth-logo">CLYPZY</div>
+        <h1 className="auth-title">Log in to Clypzy</h1>
         <p className="auth-subtitle">
           Don't have an account? <Link to="/signup" className="auth-link">Sign up</Link>
         </p>

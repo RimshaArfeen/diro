@@ -16,7 +16,7 @@ function Hero() {
         </h1>
 
         <p className="hero-subtitle">
-          Diro is the ultimate clipping platform. Get paid for every view.
+          Clypzy is the ultimate clipping platform. Get paid for every view.
         </p>
 
         <button className="cta-button" onClick={() => navigate('/login')}>

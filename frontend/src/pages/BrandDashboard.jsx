@@ -148,7 +148,7 @@ function BrandDashboard() {
   return (
     <div className="dash">
       <nav className="dash-nav">
-        <Link to="/brand-dashboard" className="dash-logo">DIRO <span className="dash-beta brand-beta">BRAND</span></Link>
+        <Link to="/brand-dashboard" className="dash-logo">CLYPZY <span className="dash-beta brand-beta">BRAND</span></Link>
         <div className="dash-tabs">
           <span className="dash-tab active"><span className="tab-icon"><FiBarChart2 size={14} /></span> Dashboard</span>
         </div>

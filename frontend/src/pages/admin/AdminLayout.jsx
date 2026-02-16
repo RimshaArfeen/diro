@@ -25,7 +25,7 @@ function AdminLayout({ title, children }) {
     <div className="admin-layout">
       <aside className="admin-sidebar">
         <NavLink to="/admin/dashboard" className="admin-sidebar-logo">
-          DIRO <span className="admin-badge">ADMIN</span>
+          CLYPZY <span className="admin-badge">ADMIN</span>
         </NavLink>
         <nav className="admin-nav">
           {navItems.map((item) => {
