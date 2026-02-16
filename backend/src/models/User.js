@@ -23,9 +23,21 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
+    required: [function () { return !this.googleId; }, 'Password is required'],
     minlength: [8, 'Password must be at least 8 characters'],
     select: false
+  },
+  googleId: {
+    type: String,
+    default: null
+  },
+  authProvider: {
+    type: String,
+    enum: {
+      values: ['local', 'google'],
+      message: 'Auth provider must be local or google'
+    },
+    default: 'local'
   },
   role: {
     type: String,
@@ -61,6 +73,11 @@ const userSchema = new mongoose.Schema({
       min: [0, 'Withdrawable balance cannot be negative']
     }
   },
+  // Permission flag: only admin-approved brands can create campaigns
+  canCreateCampaign: {
+    type: Boolean,
+    default: false
+  },
   isActive: {
     type: Boolean,
     default: true
@@ -71,7 +88,7 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function () {
-  if (!this.isModified('password')) return;
+  if (!this.isModified('password') || !this.password) return;
   const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_ROUNDS) || 10);
   this.password = await bcrypt.hash(this.password, salt);
 });

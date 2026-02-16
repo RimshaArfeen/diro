@@ -65,10 +65,21 @@ const BrandDashboard = () => {
             </p>
           </div>
           <div className="hero-actions">
-            <Link to="/create-campaign" className="btn-primary-hero">
-              <span className="btn-icon">+</span>
-              Create Campaign
-            </Link>
+            {user?.canCreateCampaign ? (
+              <Link to="/create-campaign" className="btn-primary-hero">
+                <span className="btn-icon">+</span>
+                Create Campaign
+              </Link>
+            ) : (
+              <span
+                className="btn-primary-hero"
+                style={{ opacity: 0.5, cursor: 'not-allowed', pointerEvents: 'none' }}
+                title="Permission required — contact admin"
+              >
+                <span className="btn-icon">🔒</span>
+                Create Campaign
+              </span>
+            )}
           </div>
         </div>
         <div className="hero-decoration">
@@ -77,6 +88,30 @@ const BrandDashboard = () => {
           <div className="decoration-circle circle-3"></div>
         </div>
       </div>
+
+      {/* Permission Warning Banner */}
+      {!user?.canCreateCampaign && (
+        <div style={{
+          background: 'rgba(245, 158, 11, 0.08)',
+          border: '1px solid rgba(245, 158, 11, 0.3)',
+          borderRadius: 12,
+          padding: '16px 20px',
+          margin: '0 24px 0',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+        }}>
+          <span style={{ fontSize: '1.3rem' }}>🔒</span>
+          <div>
+            <p style={{ margin: 0, fontWeight: 600, color: '#92400e', fontSize: '0.9rem' }}>
+              Campaign Creation Restricted
+            </p>
+            <p style={{ margin: '4px 0 0', color: '#a16207', fontSize: '0.84rem' }}>
+              Your account is not authorized to create campaigns. Please contact admin for approval.
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="dashboard-content">
         {/* Stats Grid */}
@@ -172,10 +207,17 @@ const BrandDashboard = () => {
             <div className="sidebar-card quick-actions-card">
               <h3 className="sidebar-title">Quick Actions</h3>
               <div className="quick-actions-grid">
-                <Link to="/create-campaign" className="quick-action-btn">
-                  <span className="qa-icon">📝</span>
-                  <span>New Campaign</span>
-                </Link>
+                {user?.canCreateCampaign ? (
+                  <Link to="/create-campaign" className="quick-action-btn">
+                    <span className="qa-icon">📝</span>
+                    <span>New Campaign</span>
+                  </Link>
+                ) : (
+                  <span className="quick-action-btn" style={{ opacity: 0.5, cursor: 'not-allowed' }} title="Permission required — contact admin">
+                    <span className="qa-icon">🔒</span>
+                    <span>New Campaign</span>
+                  </span>
+                )}
                 <Link to="/campaigns" className="quick-action-btn">
                   <span className="qa-icon">📊</span>
                   <span>All Campaigns</span>

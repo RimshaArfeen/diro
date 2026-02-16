@@ -13,6 +13,7 @@ import Earnings from './pages/Earnings'
 import Settings from './pages/Settings'
 import BrandDashboard from './pages/BrandDashboard'
 import BrandSettings from './pages/BrandSettings'
+import CreateCampaign from './components/CreateCampaign'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUsers from './pages/admin/AdminUsers'
@@ -60,6 +61,7 @@ function AppRoutes() {
       <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       <Route path="/brand-dashboard" element={<ProtectedRoute><BrandDashboard /></ProtectedRoute>} />
       <Route path="/brand-settings" element={<ProtectedRoute><BrandSettings /></ProtectedRoute>} />
+      <Route path="/create-campaign" element={<ProtectedRoute role="brand"><CreateCampaign /></ProtectedRoute>} />
       {/* Admin Routes */}
       <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
       <Route path="/admin/login" element={<AdminLogin />} />

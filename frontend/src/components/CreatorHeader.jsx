@@ -78,7 +78,7 @@ const CreatorHeader = () => {
         {/* Left — Logo */}
         <div className="ch-left">
           <NavLink to="/creator/dashboard" className="ch-brand">
-            <img src={logo} alt="CLYPZY" className="ch-brand-logo" />
+            <img src={logo} alt="DIRO" className="ch-brand-logo" />
           </NavLink>
         </div>
 

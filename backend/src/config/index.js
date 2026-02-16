@@ -5,6 +5,7 @@ module.exports = {
   bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS) || 10,
   port: process.env.PORT || 3000,
   corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
   logLevel: process.env.LOG_LEVEL || 'info',
   stripe: {
     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,

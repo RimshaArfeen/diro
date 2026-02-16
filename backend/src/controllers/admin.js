@@ -3,7 +3,7 @@ const User = require('../models/User');
 const Campaign = require('../models/Campaign');
 const Clip = require('../models/Clip');
 const Payment = require('../models/Payment');
-const { ValidationError } = require('../utils/errors');
+const { ValidationError, NotFoundError } = require('../utils/errors');
 
 // GET /api/admin/settings
 const getSettings = async (req, res, next) => {
@@ -78,8 +78,38 @@ const getDashboard = async (req, res, next) => {
   }
 };
 
+// PATCH /api/admin/brand/:id/permission
+// Toggle campaign creation permission for a brand user
+const updateBrandPermission = async (req, res, next) => {
+  try {
+    const { canCreateCampaign } = req.body;
+
+    // Validate input
+    if (typeof canCreateCampaign !== 'boolean') {
+      throw new ValidationError('canCreateCampaign must be a boolean value');
+    }
+
+    // Find the brand user by userId
+    const brand = await User.findOne({ userId: req.params.id, role: 'brand' });
+    if (!brand) {
+      throw new NotFoundError('Brand user');
+    }
+
+    brand.canCreateCampaign = canCreateCampaign;
+    await brand.save();
+
+    res.json({
+      message: `Campaign creation ${canCreateCampaign ? 'enabled' : 'disabled'} for ${brand.name}`,
+      user: brand
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getSettings,
   updateSettings,
-  getDashboard
+  getDashboard,
+  updateBrandPermission
 };

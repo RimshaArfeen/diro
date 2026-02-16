@@ -1,5 +1,3 @@
-
-//frontend/src/pages/Settings.jsx
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -143,41 +141,20 @@ function Settings() {
 
   const [socialError, setSocialError] = useState('')
 
-  // const handleConnectSocial = async (platform) => {
-  //   if (!socialInput.trim()) return
-  //   setSaving(true)
-  //   setSocialError('')
-  //   try {
-  //     const data = await usersAPI.linkSocial(platform, socialInput.trim())
-  //     updateUser({ socialAccounts: data.user.socialAccounts })
-  //   } catch (err) {
-  //     setSocialError(err.message || 'Failed to connect account')
-  //   }
-  //   setSaving(false)
-  //   setConnectingPlatform(null)
-  //   setSocialInput('')
-  // }
-
   const handleConnectSocial = async (platform) => {
-    if (!socialInput.trim()) return;
-    setSaving(true); // Start loading spinner
-    setSocialError('');
-
+    if (!socialInput.trim()) return
+    setSaving(true)
+    setSocialError('')
     try {
-      // We send 'accountId' because that's what your controller expects
-      const data = await usersAPI.linkSocial(platform, socialInput.trim());
-
-      // If we reach here, the backend verified it!
-      updateUser({ socialAccounts: data.user.socialAccounts });
-      setConnectingPlatform(null);
-      setSocialInput('');
+      const data = await usersAPI.linkSocial(platform, socialInput.trim())
+      updateUser({ socialAccounts: data.user.socialAccounts })
     } catch (err) {
-      // This will trigger if the backend returns 400 or 404
-      setSocialError(err.response?.data?.message || 'Account does not exist or is private.');
-    } finally {
-      setSaving(false);
+      setSocialError(err.message || 'Failed to connect account')
     }
-  };
+    setSaving(false)
+    setConnectingPlatform(null)
+    setSocialInput('')
+  }
 
   const handleDisconnectSocial = async (platform) => {
     setSaving(true)
@@ -520,7 +497,7 @@ function Settings() {
                 <div className="delete-icon"><FiAlertTriangle size={20} /></div>
                 <div>
                   <span className="delete-title">Delete account</span>
-                  <span className="delete-desc">Permanently delete your Clypzy account.</span>
+                  <span className="delete-desc">Permanently delete your Diro account.</span>
                 </div>
                 <button className="delete-btn" onClick={handleDelete}><FiTrash2 size={14} style={{ marginRight: 4 }} /> Delete</button>
               </div>

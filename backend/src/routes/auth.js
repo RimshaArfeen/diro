@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { register, login } = require('../controllers/users');
+const { googleLogin } = require('../controllers/googleAuth');
 const validate = require('../middleware/validate');
 
 router.post('/register', validate({
@@ -15,5 +16,11 @@ router.post('/login', validate({
   password: { required: true, type: 'string' },
   role: { required: false, type: 'string', enum: ['creator', 'brand'] }
 }), login);
+
+// Google OAuth login
+router.post('/google', validate({
+  credential: { required: true, type: 'string' },
+  role: { required: false, type: 'string', enum: ['creator', 'brand'] }
+}), googleLogin);
 
 module.exports = router;

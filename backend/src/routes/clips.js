@@ -1,6 +1,3 @@
-
-//backend/src/routes/clips.js
-
 const express = require('express');
 const router = express.Router();
 const { authenticate, authorize } = require('../middleware/auth');
@@ -16,7 +13,7 @@ const {
 
 router.use(authenticate);
 
-router.post('/', authenticate, authorize('creator'), submitClip);
+router.post('/', authorize('creator'), submitClip);
 router.get('/', listClips);
 router.get('/analytics/me', authorize('creator'), (req, res, next) => {
   req.params.creatorId = req.user.userId;

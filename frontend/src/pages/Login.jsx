@@ -1,7 +1,18 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { GoogleLogin } from '@react-oauth/google'
 import { useAuth } from '../context/AuthContext'
 import './Auth.css'
+
+function navigateByRole(navigate, userData) {
+  if (userData.role === 'brand') {
+    navigate('/brand-dashboard')
+  } else if (userData.role === 'admin') {
+    navigate('/admin/dashboard')
+  } else {
+    navigate('/dashboard')
+  }
+}
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -9,7 +20,7 @@ function Login() {
   const [role, setRole] = useState('creator')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const { user, login } = useAuth()
+  const { user, login, googleLogin } = useAuth()
   const navigate = useNavigate()
 
   if (user) return <Navigate to={user.role === 'brand' ? '/brand-dashboard' : '/dashboard'} replace />
@@ -21,16 +32,7 @@ function Login() {
     setSubmitting(true)
     try {
       const userData = await login(email, password, role)
-      // Route based on actual user role from backend
-      if (userData.role === 'brand') {
-        navigate('/brand-dashboard')
-      } else if (userData.role === 'creator') {
-        navigate('/dashboard')
-      } else if (userData.role === 'admin') {
-        navigate('/admin/dashboard')
-      } else {
-        navigate('/dashboard')
-      }
+      navigateByRole(navigate, userData)
     } catch (err) {
       setError(err.message || 'Login failed')
     } finally {
@@ -38,11 +40,28 @@ function Login() {
     }
   }
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setError('')
+    setSubmitting(true)
+    try {
+      const userData = await googleLogin(credentialResponse.credential, role)
+      navigateByRole(navigate, userData)
+    } catch (err) {
+      setError(err.message || 'Google login failed')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleGoogleError = () => {
+    setError('Google sign-in was unsuccessful. Please try again.')
+  }
+
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">CLYPZY</div>
-        <h1 className="auth-title">Log in to Clypzy</h1>
+        <div className="auth-logo">DIRO</div>
+        <h1 className="auth-title">Log in to Diro</h1>
         <p className="auth-subtitle">
           Don't have an account? <Link to="/signup" className="auth-link">Sign up</Link>
         </p>
@@ -51,6 +70,19 @@ function Login() {
           <button className={`role-btn ${role === 'brand' ? 'active' : ''}`} onClick={() => setRole('brand')}>Brand</button>
         </div>
         {error && <p style={{ color: '#e53e3e', fontSize: '0.85rem', marginBottom: 16 }}>{error}</p>}
+        <div className="google-btn-wrapper">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            text="continue_with"
+            shape="pill"
+            size="large"
+            width="100%"
+          />
+        </div>
+        <div className="auth-divider">
+          <span>or</span>
+        </div>
         <form className="auth-form" onSubmit={handleSubmit}>
           <input
             type="email"

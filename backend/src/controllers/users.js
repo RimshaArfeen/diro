@@ -1,12 +1,7 @@
-
-//backend/src/controllers/users.js
-
 const User = require('../models/User');
 const { generateToken } = require('../middleware/auth');
 const generateId = require('../utils/generateId');
 const { NotFoundError, ValidationError, ConflictError, AuthenticationError } = require('../utils/errors');
-const axios = require('axios');
-const cheerio = require('cheerio');
 
 // POST /api/auth/register
 const register = async (req, res, next) => {
@@ -196,97 +191,30 @@ const getWallet = async (req, res, next) => {
 };
 
 // POST /api/users/:userId/social (link social account)
-// const linkSocialAccount = async (req, res, next) => {
-//   try {
-//     const { platform, accountId } = req.body;
-//     const validPlatforms = ['instagram', 'tiktok', 'youtube'];
-
-//     if (!validPlatforms.includes(platform)) {
-//       throw new ValidationError(`Platform must be one of: ${validPlatforms.join(', ')}`);
-//     }
-
-//     const update = {};
-//     update[`socialAccounts.${platform}`] = accountId;
-
-//     const user = await User.findOneAndUpdate(
-//       { userId: req.user.userId },
-//       update,
-//       { new: true, runValidators: true }
-//     );
-
-//     if (!user) throw new NotFoundError('User');
-//     res.json({ user });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-
 const linkSocialAccount = async (req, res, next) => {
   try {
     const { platform, accountId } = req.body;
-    const cleanHandle = accountId.replace(/@/g, '').trim();
+    const validPlatforms = ['instagram', 'tiktok', 'youtube'];
 
-    if (!cleanHandle) {
-      const update = { [`socialAccounts.${platform}`]: null };
-      const user = await User.findOneAndUpdate({ userId: req.user.userId }, update, { new: true });
-      return res.json({ user });
+    if (!validPlatforms.includes(platform)) {
+      throw new ValidationError(`Platform must be one of: ${validPlatforms.join(', ')}`);
     }
 
-    const urlMap = {
-      tiktok: `https://www.tiktok.com/@${cleanHandle}`,
-      instagram: `https://www.instagram.com/${cleanHandle}/`,
-      youtube: `https://www.youtube.com/@${cleanHandle}`
-    };
+    const update = {};
+    update[`socialAccounts.${platform}`] = accountId;
 
-    try {
-      const response = await axios.get(urlMap[platform], {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
-          'Accept': 'text/html'
-        },
-        timeout: 10000
-      });
-
-      const $ = cheerio.load(response.data);
-      const pageTitle = $('title').text().toLowerCase();
-
-      // FINGERPRINT LOGIC
-      // 1. Check if the page title contains "Login" (Redirected to login)
-      // 2. Check if meta tags are missing (Blocked or dead page)
-      if (pageTitle.includes('login') || pageTitle.includes('signin')) {
-        throw new Error('Account blocked or private');
-      }
-
-      if (platform === 'instagram' && response.data.includes('og:type" content="profile"')) {
-        // This is a real IG profile!
-      } else if (platform === 'tiktok' && response.data.includes('"webapp.user-detail"')) {
-        // This is a real TikTok profile!
-      } else if (platform === 'youtube') {
-        // YouTube is usually fine with the basic 200 OK
-      } else {
-        // If none of the fingerprints match, it's a fake/redirected page
-        return res.status(404).json({ message: `Could not verify @${cleanHandle}. Profile is likely private or non-existent.` });
-      }
-
-    } catch (error) {
-      return res.status(404).json({ message: `Social platform rejected the connection. @${cleanHandle} not found.` });
-    }
-
-    // SUCCESS: Save to MongoDB
-    const update = { [`socialAccounts.${platform}`]: cleanHandle };
     const user = await User.findOneAndUpdate(
       { userId: req.user.userId },
       update,
       { new: true, runValidators: true }
     );
 
+    if (!user) throw new NotFoundError('User');
     res.json({ user });
   } catch (error) {
     next(error);
   }
 };
-
 
 module.exports = {
   register,

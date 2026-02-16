@@ -4,9 +4,9 @@ import { useAuth } from '../context/AuthContext';
 import logo from '../assets/log.png';
 import './brandHeader.css';
 
-const BRAND_NAV = [
+// Base nav items — "Create Campaign" is conditionally added based on permission
+const BASE_NAV = [
   { path: '/brand/dashboard', label: 'My Campaigns', icon: '📊' },
-  { path: '/create-campaign', label: 'Create Campaign', icon: '🚀' },
   { path: '/campaigns', label: 'Analytics', icon: '📈' },
 ];
 
@@ -28,6 +28,11 @@ const BrandHeader = () => {
   const brandName = user?.name || 'Brand';
   const brandEmail = user?.email || 'brand@diro.com';
   const brandInitial = brandName.charAt(0).toUpperCase();
+
+  // Build nav items — conditionally include "Create Campaign" if brand has permission
+  const BRAND_NAV = user?.canCreateCampaign
+    ? [BASE_NAV[0], { path: '/create-campaign', label: 'Create Campaign', icon: '🚀' }, BASE_NAV[1]]
+    : BASE_NAV;
 
   // Prevent browser back button from leaving the brand dashboard
   useEffect(() => {
@@ -82,7 +87,7 @@ const BrandHeader = () => {
         {/* Left — Logo */}
         <div className="bh-left">
           <NavLink to="/brand/dashboard" className="bh-brand">
-            <img src={logo} alt="CLYPZY" className="bh-brand-logo" />
+            <img src={logo} alt="DIRO" className="bh-brand-logo" />
             <span className="bh-brand-badge">Brand</span>
           </NavLink>
         </div>

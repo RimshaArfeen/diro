@@ -40,11 +40,6 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api', routes);
 
-//logo uploads
-const path = require('path');
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-
 // Error handling
 app.use(errorHandler);
 
@@ -59,7 +54,7 @@ const startServer = async () => {
 
   const PORT = config.port;
   app.listen(PORT, () => {
-    console.log(`Clypzy Backend API running on port ${PORT}`);
+    console.log(`DIRO Backend API running on port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   });
 };

@@ -1,7 +1,18 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { GoogleLogin } from '@react-oauth/google'
 import { useAuth } from '../context/AuthContext'
 import './Auth.css'
+
+function navigateByRole(navigate, userData) {
+  if (userData.role === 'brand') {
+    navigate('/brand-dashboard')
+  } else if (userData.role === 'admin') {
+    navigate('/admin/dashboard')
+  } else {
+    navigate('/dashboard')
+  }
+}
 
 function Signup() {
   const [name, setName] = useState('')
@@ -10,7 +21,7 @@ function Signup() {
   const [role, setRole] = useState('creator')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const { user, signup } = useAuth()
+  const { user, signup, googleLogin } = useAuth()
   const navigate = useNavigate()
 
   if (user) return <Navigate to={user.role === 'brand' ? '/brand-dashboard' : '/dashboard'} replace />
@@ -22,7 +33,7 @@ function Signup() {
     setSubmitting(true)
     try {
       const userData = await signup(name, email, password, role)
-      navigate(userData.role === 'brand' ? '/brand-dashboard' : '/dashboard')
+      navigateByRole(navigate, userData)
     } catch (err) {
       setError(err.message || 'Signup failed')
     } finally {
@@ -30,11 +41,28 @@ function Signup() {
     }
   }
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setError('')
+    setSubmitting(true)
+    try {
+      const userData = await googleLogin(credentialResponse.credential, role)
+      navigateByRole(navigate, userData)
+    } catch (err) {
+      setError(err.message || 'Google sign-up failed')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleGoogleError = () => {
+    setError('Google sign-in was unsuccessful. Please try again.')
+  }
+
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">CLYPZY</div>
-        <h1 className="auth-title">Sign up for Clypzy</h1>
+        <div className="auth-logo">DIRO</div>
+        <h1 className="auth-title">Sign up for Diro</h1>
         <p className="auth-subtitle">
           Already have an account? <Link to="/login" className="auth-link">Log in</Link>
         </p>
@@ -43,6 +71,19 @@ function Signup() {
           <button className={`role-btn ${role === 'brand' ? 'active' : ''}`} onClick={() => setRole('brand')}>Brand</button>
         </div>
         {error && <p style={{ color: '#e53e3e', fontSize: '0.85rem', marginBottom: 16 }}>{error}</p>}
+        <div className="google-btn-wrapper">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            text="continue_with"
+            shape="pill"
+            size="large"
+            width="100%"
+          />
+        </div>
+        <div className="auth-divider">
+          <span>or</span>
+        </div>
         <form className="auth-form" onSubmit={handleSubmit}>
           <input
             type="text"

@@ -5,34 +5,7 @@ import { useAuth } from './AuthContext'
 const CampaignContext = createContext(null)
 
 // Map backend campaign to frontend shape
-// function mapCampaign(c) {
-//   return {
-//     id: c.campaignId || c._id,
-//     name: c.title,
-//     avatar: null,
-//     time: c.createdAt ? new Date(c.createdAt).toLocaleDateString() : '',
-//     type: 'Per view',
-//     title: c.title,
-//     socials: (c.platforms || ['Instagram', 'TikTok', 'YouTube', 'X']).map(p => p),
-//     pay: `$${c.CPM ? (c.CPM * 1000).toFixed(0) : '0'}`,
-//     cpm: c.CPM || 0,
-//     budget: c.deposit || 0,
-//     endsIn: c.status === 'completed' ? 'Ended' : 'Active',
-//     language: 'English',
-//     platforms: c.platforms || ['Instagram', 'TikTok', 'YouTube', 'X'],
-//     description: c.description || '',
-//     rules: c.rules || '',
-//     minViews: c.minViewsForPayout || 0,
-//     goalViews: c.goalViews || 0,
-//     status: c.status === 'live' ? 'Active' : c.status === 'pending' ? 'Pending' : c.status === 'completed' ? 'Completed' : c.status,
-//     paidOutPercent: 0,
-//     sourceVideos: c.sourceVideos || [],
-//     brandId: c.brandId,
-//     createdAt: c.createdAt,
-//   }
-// }
-
-function mapCampaign(c, userRole) {
+function mapCampaign(c) {
   return {
     id: c.campaignId || c._id,
     name: c.title,
@@ -55,33 +28,16 @@ function mapCampaign(c, userRole) {
     paidOutPercent: 0,
     sourceVideos: c.sourceVideos || [],
     brandId: c.brandId,
-    brandLogo: c.brandLogo || null,               // ✅ always public
-    currency: userRole === 'admin' ? c.currency : undefined, // only admin can see
     createdAt: c.createdAt,
   }
 }
 
-
 // Map backend clip to frontend shape
-// function mapClip(c) {
-//   return {
-//     id: c.clipId || c._id,
-//     campaignId: c.campaignId,
-//     link: c.clipLink,
-//     platform: detectPlatform(c.clipLink || ''),
-//     submittedAt: new Date(c.submittedAt || c.createdAt).getTime(),
-//     views: c.views || 0,
-//     earnings: c.earnings || 0,
-//     status: c.status === 'approved' ? 'approved' : c.status === 'flagged' ? 'rejected' : 'pending',
-//   }
-// }
-//mapclip to show creator description
 function mapClip(c) {
   return {
     id: c.clipId || c._id,
     campaignId: c.campaignId,
     link: c.clipLink,
-    creatorMessage: c.creatorMessage || '',
     platform: detectPlatform(c.clipLink || ''),
     submittedAt: new Date(c.submittedAt || c.createdAt).getTime(),
     views: c.views || 0,
@@ -89,7 +45,6 @@ function mapClip(c) {
     status: c.status === 'approved' ? 'approved' : c.status === 'flagged' ? 'rejected' : 'pending',
   }
 }
-
 
 function detectPlatform(link) {
   if (link.includes('instagram')) return 'Instagram'
@@ -114,21 +69,20 @@ export function CampaignProvider({ children }) {
   useEffect(() => { localStorage.setItem('diro_joined', JSON.stringify(joinedCampaigns)) }, [joinedCampaigns])
 
   // Load campaigns from API
+  // Backend enforces visibility: creators only receive live campaigns.
+  // Frontend adds a safety filter for UX consistency.
   useEffect(() => {
     if (!user) return
-    // campaignsAPI.list()
-    //   .then((data) => {
-    //     const mapped = (data.campaigns || []).map(mapCampaign)
-    //     setCampaigns(mapped)
-    //   })
-    //   .catch(() => {})
     campaignsAPI.list()
       .then((data) => {
-        const mapped = (data.campaigns || []).map(c => mapCampaign(c, user?.role))
-        setCampaigns(mapped)
+        let campaignList = (data.campaigns || [])
+        // For creators: extra safety filter — only show live (active & approved) campaigns
+        if (user.role === 'creator') {
+          campaignList = campaignList.filter(c => c.status === 'live')
+        }
+        setCampaigns(campaignList.map(mapCampaign))
       })
-      .catch(() => { })
-
+      .catch(() => {})
   }, [user])
 
   // Load clips from API
@@ -183,21 +137,10 @@ export function CampaignProvider({ children }) {
     setJoinedCampaigns(prev => prev.filter(x => x !== id))
   }, [])
 
-  // const submitClip = useCallback(async (campaignId, link) => {
-  //   const data = await clipsAPI.submit({ campaignId, clipLink: link })
-  //   setClips(prev => [...prev, mapClip(data.clip)])
-  // }, [])
-
-  const submitClip = useCallback(async (campaignId, link, creatorMessage) => {
-    const data = await clipsAPI.submit({
-      campaignId,
-      clipLink: link,
-      creatorMessage
-    })
-
+  const submitClip = useCallback(async (campaignId, link) => {
+    const data = await clipsAPI.submit({ campaignId, clipLink: link })
     setClips(prev => [...prev, mapClip(data.clip)])
   }, [])
-
 
   const refreshClips = useCallback(async () => {
     try {

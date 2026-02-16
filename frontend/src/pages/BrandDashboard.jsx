@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -26,11 +24,7 @@ function BrandDashboard() {
   const [showForm, setShowForm] = useState(false)
   const [showPerformance, setShowPerformance] = useState(false)
   const [showBudget, setShowBudget] = useState(false)
-  const [form, setForm] = useState({
-    title: '', description: '', cpm: '', budget: '',
-    goal: '', videos: [], currency: 'USD', // NEW
-    logo: null
-  })
+  const [form, setForm] = useState({ title: '', description: '', cpm: '', budget: '', goal: '', videos: [] })
   const [formError, setFormError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -56,7 +50,7 @@ function BrandDashboard() {
         }))
         setCampaigns(mapped)
       })
-      .catch(() => { })
+      .catch(() => {})
       .finally(() => setLoading(false))
   }, [user])
 
@@ -75,151 +69,73 @@ function BrandDashboard() {
     setForm(p => ({ ...p, videos: [...p.videos, ...files] }))
   }
 
-  //Logo 
-  const handleLogoChange = (e) => {
-    const file = e.target.files[0]; // This is the actual File object
-    if (file) {
-      setForm(p => ({ ...p, logo: file }));
-    }
-  };
-
   const removeVideo = (i) => setForm(p => ({ ...p, videos: p.videos.filter((_, idx) => idx !== i) }))
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault()
-  //   setFormError('')
-
-  //   // Frontend validation
-  //   if (!form.title.trim() || !form.description.trim() || !form.cpm || !form.goal.trim()) {
-  //     setFormError('All required fields must be filled'); return
-  //   }
-  //   if (form.title.trim().length < 5) {
-  //     setFormError('Campaign title must be at least 5 characters'); return
-  //   }
-
-  //   if (form.description.trim().length < 10) {
-  //     setFormError('Description must be at least 10 characters'); return
-  //   }
-  //   if (Number(form.cpm) < MIN_CPM) {
-  //     setFormError(`CPM cannot be below $${MIN_CPM.toFixed(2)}`); return
-  //   }
-  //   if (!form.budget || Number(form.budget) <= 0) {
-  //     setFormError('Budget must be greater than 0'); return
-  //   }
-
-  //   if (!form.logo) {
-  //     setFormError('Brand logo is required')
-  //     setSubmitting(false)
-  //     return
-  //   }
-
-  //   formData.append('brandLogo', form.logo)
-
-  //   // If sending videos as files:
-  //   form.videos.forEach(video => {
-  //     formData.append('sourceVideos', video)
-  //   })
-
-  //   setSubmitting(true)
-  
-    
-
-  //   // Check if budget covers the goal
-  //   const goalViews = parseInt(form.goal.replace(/\D/g, '')) || 100000
-  //   const cpm = Number(form.cpm)
-  //   const budget = Number(form.budget)
-  //   const requiredBudget = (goalViews / 1000) * cpm
-  //   if (budget < requiredBudget) {
-  //     setFormError(`Budget ($${budget}) must cover goal views cost ($${requiredBudget.toFixed(2)}). Either increase budget or reduce goal/CPM.`); return
-  //   }
-
-  //   setSubmitting(true)
-  //   try {
-  //     const payload = {
-  //       title: form.title.trim(),
-  //       description: form.description.trim(),
-  //       CPM: cpm,
-  //       deposit: budget,
-  //       goalViews: goalViews,
-  //       currency: form.currency, // ADDED
-  //       brandLogo: form.logo ? form.logo.name : 'default-logo.png', // ADDED
-  //       sourceVideos: form.videos.length > 0 ? form.videos.map(v => v.name) : ['default-video.mp4'],
-  //       minViewsForPayout: 5000,
-  //     }
-  //     const data = await campaignsAPI.create(payload)
-  //     const c = data.campaign
-  //     setCampaigns(prev => [{
-  //       id: c.campaignId || c._id,
-  //       title: c.title,
-  //       description: c.description,
-  //       cpm: c.CPM || 0,
-  //       budget: c.deposit || 0,
-  //       currency: form.currency, // NEW
-  //       brandLogo: form.logo.name, // NEW (See note below)
-  //       goal: c.goalViews ? `${c.goalViews.toLocaleString()} views` : '',
-  //       videos: c.sourceVideos || [],
-  //       status: 'Pending Approval',
-  //       views: 0, clicks: 0, spend: 0,
-  //       remaining: c.deposit || 0,
-  //       createdAt: new Date(c.createdAt).getTime(),
-  //     }, ...prev])
-  //     setForm({ title: '', description: '', cpm: '', budget: '', goal: '', videos: [] })
-  //     setShowForm(false)
-  //   } catch (err) {
-  //     setFormError(err.message || 'Failed to create campaign')
-  //   } finally {
-  //     setSubmitting(false)
-  //   }
-  // }
-
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormError('');
+    e.preventDefault()
+    setFormError('')
 
-    // Perform validation before starting submission
-    const goalViews = parseInt(form.goal.replace(/\D/g, '')) || 0;
-    const cpm = Number(form.cpm);
-    const budget = Number(form.budget);
-    const requiredBudget = (goalViews / 1000) * cpm;
+    // Frontend validation
+    if (!form.title.trim() || !form.description.trim() || !form.cpm || !form.goal.trim()) {
+      setFormError('All required fields must be filled'); return
+    }
+    if (form.title.trim().length < 5) {
+      setFormError('Campaign title must be at least 5 characters'); return
+    }
+    if (form.description.trim().length < 10) {
+      setFormError('Description must be at least 10 characters'); return
+    }
+    if (Number(form.cpm) < MIN_CPM) {
+      setFormError(`CPM cannot be below $${MIN_CPM.toFixed(2)}`); return
+    }
+    if (!form.budget || Number(form.budget) <= 0) {
+      setFormError('Budget must be greater than 0'); return
+    }
 
+    // Check if budget covers the goal
+    const goalViews = parseInt(form.goal.replace(/\D/g, '')) || 100000
+    const cpm = Number(form.cpm)
+    const budget = Number(form.budget)
+    const requiredBudget = (goalViews / 1000) * cpm
     if (budget < requiredBudget) {
-      setFormError(`Budget must cover cost ($${requiredBudget.toFixed(2)})`);
-      return;
+      setFormError(`Budget ($${budget}) must cover goal views cost ($${requiredBudget.toFixed(2)}). Either increase budget or reduce goal/CPM.`); return
     }
 
-    setSubmitting(true);
-
+    setSubmitting(true)
     try {
-      const formData = new FormData();
-      formData.append('title', form.title.trim());
-      formData.append('description', form.description.trim());
-      formData.append('CPM', cpm);
-      formData.append('deposit', budget);
-      formData.append('goalViews', goalViews);
-      formData.append('currency', form.currency);
-
-      if (!form.logo) throw new Error('Brand logo is required');
-      // Append the actual File object
-      formData.append('brandLogo', form.logo);
-
-      // Handle multiple videos if necessary
-      form.videos.forEach(videoFile => {
-        // Ensure you are appending the actual File object from state
-        formData.append('sourceVideos', videoFile);
-      });
-
-      await campaignsAPI.create(formData);
-
-      setShowForm(false);
-      // Instead of reload, consider refreshing the list state
-      window.location.reload();
+      const payload = {
+        title: form.title.trim(),
+        description: form.description.trim(),
+        CPM: cpm,
+        deposit: budget,
+        goalViews: goalViews,
+        sourceVideos: form.videos.length > 0 ? form.videos.map(v => v.name) : ['default-video.mp4'],
+        minViewsForPayout: 5000,
+      }
+      const data = await campaignsAPI.create(payload)
+      const c = data.campaign
+      setCampaigns(prev => [{
+        id: c.campaignId || c._id,
+        title: c.title,
+        description: c.description,
+        cpm: c.CPM || 0,
+        budget: c.deposit || 0,
+        goal: c.goalViews ? `${c.goalViews.toLocaleString()} views` : '',
+        videos: c.sourceVideos || [],
+        status: 'Pending Approval',
+        views: 0, clicks: 0, spend: 0,
+        remaining: c.deposit || 0,
+        createdAt: new Date(c.createdAt).getTime(),
+      }, ...prev])
+      setForm({ title: '', description: '', cpm: '', budget: '', goal: '', videos: [] })
+      setShowForm(false)
     } catch (err) {
-      setFormError(err.message || 'Failed to create campaign');
+      setFormError(err.message || 'Failed to create campaign')
     } finally {
-      setSubmitting(false);
+      setSubmitting(false)
     }
-  };
-  
+  }
+
   const totalViews = campaigns.reduce((s, c) => s + (c.views || 0), 0)
   const totalSpend = campaigns.reduce((s, c) => s + (c.spend || 0), 0)
   const totalBudget = campaigns.reduce((s, c) => s + (c.budget || 0), 0)
@@ -232,7 +148,7 @@ function BrandDashboard() {
   return (
     <div className="dash">
       <nav className="dash-nav">
-        <Link to="/brand-dashboard" className="dash-logo">CLYPZY <span className="dash-beta brand-beta">BRAND</span></Link>
+        <Link to="/brand-dashboard" className="dash-logo">DIRO <span className="dash-beta brand-beta">BRAND</span></Link>
         <div className="dash-tabs">
           <span className="dash-tab active"><span className="tab-icon"><FiBarChart2 size={14} /></span> Dashboard</span>
         </div>
@@ -268,12 +184,44 @@ function BrandDashboard() {
       </nav>
 
       <main className="dash-main">
+        {/* Permission Warning Banner */}
+        {!user?.canCreateCampaign && (
+          <div style={{
+            background: 'rgba(245, 158, 11, 0.08)',
+            border: '1px solid rgba(245, 158, 11, 0.3)',
+            borderRadius: 12,
+            padding: '16px 20px',
+            marginBottom: 24,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+          }}>
+            <span style={{ fontSize: '1.3rem' }}>🔒</span>
+            <div>
+              <p style={{ margin: 0, fontWeight: 600, color: '#92400e', fontSize: '0.9rem' }}>
+                Campaign Creation Restricted
+              </p>
+              <p style={{ margin: '4px 0 0', color: '#a16207', fontSize: '0.84rem' }}>
+                Your account is not authorized to create campaigns. Please contact admin for approval.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Action Cards */}
         <div className="dash-actions">
-          <div className="action-card" onClick={() => setShowForm(true)}>
+          <div
+            className="action-card"
+            onClick={() => user?.canCreateCampaign && setShowForm(true)}
+            style={!user?.canCreateCampaign ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+          >
             <div className="action-icon"><FiPlus size={24} /></div>
             <h3 className="action-title">Create campaign</h3>
-            <p className="action-desc">Launch a new clipping campaign for creators.</p>
+            <p className="action-desc">
+              {user?.canCreateCampaign
+                ? 'Launch a new clipping campaign for creators.'
+                : 'Permission required — contact admin.'}
+            </p>
           </div>
           <div className="action-card" onClick={() => setShowPerformance(true)}>
             <div className="action-icon"><FiTrendingUp size={24} /></div>
@@ -323,7 +271,15 @@ function BrandDashboard() {
         <div className="dash-campaigns" style={{ marginTop: 40 }}>
           <div className="bc-list-header">
             <h2 className="campaigns-heading">My campaigns</h2>
-            <button className="bc-new-btn" onClick={() => setShowForm(true)}><FiPlus size={14} /> New campaign</button>
+            <button
+              className="bc-new-btn"
+              onClick={() => user?.canCreateCampaign && setShowForm(true)}
+              disabled={!user?.canCreateCampaign}
+              style={!user?.canCreateCampaign ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+              title={!user?.canCreateCampaign ? 'Permission required — contact admin' : 'Create a new campaign'}
+            >
+              <FiPlus size={14} /> New campaign
+            </button>
           </div>
 
           {loading ? (
@@ -334,7 +290,14 @@ function BrandDashboard() {
             <div className="no-campaigns-box">
               <h3 className="no-campaigns-title">No campaigns yet</h3>
               <p className="no-campaigns-desc">Create your first campaign to start<br />getting clips from creators.</p>
-              <button className="find-campaigns-btn" onClick={() => setShowForm(true)}>Create campaign</button>
+              <button
+                className="find-campaigns-btn"
+                onClick={() => user?.canCreateCampaign && setShowForm(true)}
+                disabled={!user?.canCreateCampaign}
+                style={!user?.canCreateCampaign ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+              >
+                {user?.canCreateCampaign ? 'Create campaign' : 'Permission required'}
+              </button>
             </div>
           ) : (
             <div className="bc-list">
@@ -386,8 +349,8 @@ function BrandDashboard() {
         </div>
       </main>
 
-      {/* Create Campaign Modal */}
-      {showForm && (
+      {/* Create Campaign Modal — only render if brand has permission */}
+      {showForm && user?.canCreateCampaign && (
         <div className="modal-overlay" onClick={() => setShowForm(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setShowForm(false)}><FiX /></button>
@@ -422,36 +385,6 @@ function BrandDashboard() {
                 <input name="goal" value={form.goal} onChange={handleChange} placeholder="e.g. 1000000 views" />
                 <small style={{ color: '#888', fontSize: '0.85rem', marginTop: 4, display: 'block' }}>Target views for campaign</small>
               </div>
-              {/* Brand Logo */}
-              <div className="bc-field">
-                <label>Brand Logo *</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleLogoChange}
-                  className="bc-file-input"
-                  required
-                />
-                {form.logo && <small style={{ color: '#32CD32' }}>Selected: {form.logo.name}</small>}
-              </div>
-              {/* Currency */}
-              <div className="bc-field">
-                <label>Currency *</label>
-                <select
-                  name="currency"
-                  value={form.currency}
-                  onChange={handleChange}
-                  className="form-input"
-                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                >
-                  <option value="USD">USD ($)</option>
-                  <option value="EUR">EUR (€)</option>
-                  <option value="GBP">GBP (£)</option>
-                  <option value="PKR">PKR (Rs)</option>
-                  <option value="INR">INR (₹)</option>
-                </select>
-              </div>
-
               {form.cpm && form.goal && (
                 <div style={{ padding: '12px', background: '#f7f9fc', borderRadius: 8, marginBottom: 16 }}>
                   <div style={{ fontSize: '0.85rem', color: '#666', marginBottom: 4 }}>Budget Calculator:</div>

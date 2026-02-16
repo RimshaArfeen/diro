@@ -1,6 +1,3 @@
-
-//backend/src/controllers/clips.js
-
 const Clip = require('../models/Clip');
 const Campaign = require('../models/Campaign');
 const User = require('../models/User');
@@ -10,32 +7,13 @@ const { NotFoundError, ForbiddenError, ValidationError } = require('../utils/err
 // POST /api/clips
 const submitClip = async (req, res, next) => {
   try {
-    const { campaignId, clipLink, originalVideoLink, clipTimestamps, creatorMessage } = req.body;
+    const { campaignId, clipLink, originalVideoLink, clipTimestamps, editsDescription } = req.body;
 
     // Verify campaign exists and is live
     const campaign = await Campaign.findOne({ campaignId });
     if (!campaign) throw new NotFoundError('Campaign');
     if (campaign.status !== 'live') {
       throw new ValidationError('Can only submit clips to live campaigns');
-    }
-
-    // const clip = await Clip.create({
-    //   clipId: generateId('clip'),
-    //   campaignId,
-    //   creatorId: req.user.userId,
-    //   clipLink,
-    //   originalVideoLink,
-    //   clipTimestamps,
-    //   editsDescription,
-    //   status: 'pending'
-    // });
-    
-    if (!clipLink) {
-      throw new ValidationError('Clip link is required');
-    }
-
-    if (creatorMessage && creatorMessage.length > 1000) {
-      throw new ValidationError('Message too long (max 1000 chars)');
     }
 
     const clip = await Clip.create({
@@ -45,7 +23,7 @@ const submitClip = async (req, res, next) => {
       clipLink,
       originalVideoLink,
       clipTimestamps,
-      creatorMessage,
+      editsDescription,
       status: 'pending'
     });
 

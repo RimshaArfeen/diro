@@ -63,9 +63,9 @@ const AdminHeader = () => {
         {/* Left — Brand */}
         <div className="ah-left">
           <NavLink to="/admin" className="ah-brand" end>
-            <img src={logo} alt="CLYPZY" className="ah-brand-logo" />
+            <img src={logo} alt="DIRO" className="ah-brand-logo" />
             <span className="ah-brand-text">
-              CLYPZY <span className="ah-brand-label">Admin</span>
+              DIRO <span className="ah-brand-label">Admin</span>
             </span>
           </NavLink>
         </div>

@@ -33,10 +33,6 @@ function AddClips() {
   const [socialInput, setSocialInput] = useState('')
   const [socialSaving, setSocialSaving] = useState(false)
   const [socialError, setSocialError] = useState('')
-// creator description
-  const [creatorMessage, setCreatorMessage] = useState('')
-  const [showMessageField, setShowMessageField] = useState(false)
-
 
   const connectAccount = async (platform) => {
     if (!socialInput.trim()) return
@@ -71,33 +67,16 @@ function AddClips() {
   const [submitError, setSubmitError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
-  const joinedCamps = campaigns.filter(c => joinedCampaigns.includes(c.id))
-
-  // const handleSubmit = async () => {
-  //   if (!link.trim()) return
-  //   setSubmitError('')
-  //   setSubmitting(true)
-  //   try {
-  //     await submitClip(submitModal, link.trim())
-  //     setLink('')
-  //     setSubmitModal(null)
-  //   } catch (err) {
-  //     setSubmitError(err.message || 'Failed to submit clip')
-  //   } finally {
-  //     setSubmitting(false)
-  //   }
-  // }
+  // Only show joined campaigns that are still live/active
+  const joinedCamps = campaigns.filter(c => joinedCampaigns.includes(c.id) && c.status === 'Active')
 
   const handleSubmit = async () => {
     if (!link.trim()) return
     setSubmitError('')
     setSubmitting(true)
-
     try {
-      await submitClip(submitModal, link.trim(), creatorMessage)
+      await submitClip(submitModal, link.trim())
       setLink('')
-      setCreatorMessage('')
-      setShowMessageField(false)
       setSubmitModal(null)
     } catch (err) {
       setSubmitError(err.message || 'Failed to submit clip')
@@ -105,7 +84,6 @@ function AddClips() {
       setSubmitting(false)
     }
   }
-
 
   const getCampaignClips = (campId) => clips.filter(c => c.campaignId === campId)
 
@@ -243,22 +221,6 @@ function AddClips() {
                 autoFocus
               />
             </div>
-            {/* Cretors Message */}
-            {showMessageField && (
-              <div style={{ marginTop: 12 }}>
-                <textarea
-                  placeholder="Explain what you created for this campaign..."
-                  value={creatorMessage}
-                  onChange={(e) => setCreatorMessage(e.target.value)}
-                  maxLength={1000}
-                  className="sp-textarea"
-                />
-                <div style={{ fontSize: 12, opacity: 0.6 }}>
-                  {creatorMessage.length}/1000
-                </div>
-              </div>
-            )}
-
             <div className="sp-tip">
               <span className="sp-tip-icon"><FiAlertCircle size={16} /></span>
               <div>
@@ -268,19 +230,11 @@ function AddClips() {
             </div>
             <button
               className="cd-join-btn"
-              // onClick={handleSubmit}
-              // disabled={!link.trim() || submitting}
-              onClick={() => {
-                if (!showMessageField) {
-                  setShowMessageField(true)
-                } else {
-                  handleSubmit()
-                }
-              }}
+              onClick={handleSubmit}
+              disabled={!link.trim() || submitting}
               style={{ marginTop: 16 }}
             >
-              {/* {submitting ? 'Submitting...' : 'Submit'} */}
-              {!showMessageField ? 'Continue' : 'Submit'}
+              {submitting ? 'Submitting...' : 'Submit'}
             </button>
           </div>
         </div>

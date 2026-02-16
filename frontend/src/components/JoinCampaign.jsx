@@ -43,9 +43,27 @@ const JoinCampaign = () => {
     return (
       <div className="join-page">
         <div className="join-container">
-          <p style={{ textAlign: 'center', padding: '3rem', color: '#888' }}>Campaign not found.</p>
+          <p style={{ textAlign: 'center', padding: '3rem', color: '#888' }}>
+            Campaign not found or is no longer available.
+          </p>
           <button className="join-btn" onClick={() => navigate('/campaigns')} style={{ display: 'block', margin: '0 auto' }}>
             Browse Campaigns
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Frontend safety: prevent interaction with non-live campaigns
+  if (campaign.status !== 'live') {
+    return (
+      <div className="join-page">
+        <div className="join-container">
+          <p style={{ textAlign: 'center', padding: '3rem', color: '#888' }}>
+            This campaign is not currently active and cannot be joined.
+          </p>
+          <button className="join-btn" onClick={() => navigate('/campaigns')} style={{ display: 'block', margin: '0 auto' }}>
+            Browse Active Campaigns
           </button>
         </div>
       </div>

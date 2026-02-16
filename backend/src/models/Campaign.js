@@ -1,5 +1,3 @@
-
-// const { v4: uuidv4 } = require('uuid');
 const mongoose = require('mongoose');
 
 const campaignSchema = new mongoose.Schema({
@@ -42,16 +40,6 @@ const campaignSchema = new mongoose.Schema({
       validator: Number.isInteger,
       message: 'Goal views must be an integer'
     }
-  },
-  currency: {
-    type: String,
-    required: [true, 'Currency is required'],
-    enum: ['USD', 'EUR', 'GBP', 'PKR', 'INR'], // Add the currencies you support
-    default: 'USD'
-  },
-  brandLogo: {
-    type: String, 
-    required: [true, 'Brand logo is required']
   },
   CPM: {
     type: Number,

@@ -743,32 +743,6 @@
   color: #ffffff;
 }
 
-.camp-avatar-wrapper {
-  width: 50px;
-  height: 50px;
-  border-radius: 25%;
-  /* border: 1px solid black; */
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  color: black;
-}
-
-.camp-logo {
-  width: 90%;
-  height: 90%;
-  object-fit: cover;
-}
-
-.camp-avatar-placeholder {
-  color: #fff;
-  font-weight: 600;
-  font-size: 16px;
-}
-
-
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
   .campaigns-grid {

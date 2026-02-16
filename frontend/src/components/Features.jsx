@@ -87,7 +87,7 @@ function Features() {
           <p className="feature-desc">
             Connect your socials and add clips in seconds.
             Track your uploads, approvals and stats in one place.
-            Clypzy's your home for going viral.
+            Diro's your home for going viral.
           </p>
         </div>
         <div className="feature-card submit-card">
@@ -153,7 +153,7 @@ function Features() {
             easy mode
           </h3>
           <p className="feature-desc">
-            Payouts are sent to your CLYPZY wallet hourly.
+            Payouts are sent to your Diro wallet hourly.
             <br />
             See what you've earned and withdraw using Stripe or
             PayPal (depending on country).

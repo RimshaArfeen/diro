@@ -26,8 +26,6 @@ function Dashboard() {
   } = useCampaigns()
   const { user, updateUser } = useAuth()
 
-
-  console.log("Active Campaigns : ", campaigns)
   // Derive connected accounts from user.socialAccounts (backend)
   const socialAccounts = user?.socialAccounts || {}
   const connectedAccounts = PLATFORM_CONFIG
@@ -103,30 +101,12 @@ function Dashboard() {
 
         <div className="dash-campaigns">
           <h2 className="campaigns-heading">Active campaigns</h2>
-          <p className="campaigns-sub">Select a campaign to see details and start clipping</p>
+          <p className="campaigns-sub">Only live & approved campaigns are shown. Select one to see details and start clipping.</p>
           <div className="campaigns-grid">
-            {campaigns.map((c) => (
-              
+            {campaigns.filter(c => c.status === 'Active').map((c) => (
               <div className="campaign-card-dash" key={c.id} onClick={() => setSelected(c)}>
                 <div className="camp-top">
-                  {/* <div className="camp-avatar-placeholder">{c.name?.charAt(0).toUpperCase() || 'C'}</div> */}
-                  <div className="camp-avatar-wrapper">
-                    {c.brandLogo && c.brandLogo.startsWith("https://res.cloudinary") ? (
-                      <img
-                        src={c.brandLogo}
-                        alt={c.title}
-                        className="camp-logo"
-                        onError={(e) => { e.target.style.display = "none" }}
-                      />
-                    ) : (
-                      <div className="camp-avatar-placeholder">
-                        {c.title?.charAt(0).toUpperCase() || "C"}
-                      </div>
-                    )}
-                  </div>
-
-
-
+                  <div className="camp-avatar-placeholder">{c.name?.charAt(0).toUpperCase() || 'C'}</div>
                   <div className="camp-info">
                     <span className="camp-name">{c.name} <span className="camp-verified"><FiCheck size={10} /></span></span>
                     <span className="camp-meta">{c.time} · {c.type}</span>
@@ -181,7 +161,7 @@ function Dashboard() {
 
         <div className="dash-topclips">
           <h2 className="stats-heading">Top clips</h2>
-          <p className="stats-sub">Your most viewed Clypzy clips</p>
+          <p className="stats-sub">Your most viewed Diro clips</p>
           <div className="topclips-grid">
             {topClips.map(clip => {
               const camp = campaigns.find(c => c.id === clip.campaignId)

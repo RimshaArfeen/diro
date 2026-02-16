@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { usersAPI, clipsAPI, campaignsAPI } from '../../services/api'
+import { usersAPI, clipsAPI, campaignsAPI, adminAPI } from '../../services/api'
 import AdminLayout from './AdminLayout'
 import './Admin.css'
 
@@ -52,6 +52,7 @@ function AdminUsers() {
           status: u.isActive ? 'active' : 'suspended',
           joined: new Date(u.createdAt).toLocaleDateString('en-CA'),
           campaigns: campaignsPerBrand[u.userId] || 0,
+          canCreateCampaign: !!u.canCreateCampaign,
         })))
       })
       .catch(() => {})
@@ -81,6 +82,25 @@ function AdminUsers() {
     setBrands(prev => prev.map(u =>
       u.id === id ? { ...u, status: u.status === 'active' ? 'suspended' : 'active' } : u
     ))
+  }
+
+  // Toggle campaign creation permission for a brand
+  const toggleCampaignPermission = async (id) => {
+    const brand = brands.find(u => u.id === id)
+    if (!brand) return
+    const newValue = !brand.canCreateCampaign
+    // Optimistic UI update
+    setBrands(prev => prev.map(u =>
+      u.id === id ? { ...u, canCreateCampaign: newValue } : u
+    ))
+    try {
+      await adminAPI.updateBrandPermission(id, newValue)
+    } catch {
+      // Revert on failure
+      setBrands(prev => prev.map(u =>
+        u.id === id ? { ...u, canCreateCampaign: !newValue } : u
+      ))
+    }
   }
 
   return (
@@ -145,6 +165,7 @@ function AdminUsers() {
                     <th>Brand</th>
                     <th>Email</th>
                     <th>Campaigns</th>
+                    <th>Campaign Permission</th>
                     <th>Status</th>
                     <th>Joined</th>
                     <th>Actions</th>
@@ -156,6 +177,40 @@ function AdminUsers() {
                       <td style={{ fontWeight: 600 }}>{u.name}</td>
                       <td>{u.email}</td>
                       <td style={{ fontWeight: 600, color: '#6366f1' }}>{u.campaigns}</td>
+                      <td>
+                        {/* Campaign creation permission toggle */}
+                        <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                          <span
+                            onClick={() => toggleCampaignPermission(u.id)}
+                            style={{
+                              display: 'inline-block',
+                              width: 40,
+                              height: 22,
+                              borderRadius: 12,
+                              background: u.canCreateCampaign ? '#22c55e' : '#d1d5db',
+                              position: 'relative',
+                              transition: 'background 0.2s',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            <span style={{
+                              display: 'block',
+                              width: 16,
+                              height: 16,
+                              borderRadius: '50%',
+                              background: '#fff',
+                              position: 'absolute',
+                              top: 3,
+                              left: u.canCreateCampaign ? 21 : 3,
+                              transition: 'left 0.2s',
+                              boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                            }} />
+                          </span>
+                          <span style={{ fontSize: '0.78rem', fontWeight: 600, color: u.canCreateCampaign ? '#22c55e' : '#9aa3ae' }}>
+                            {u.canCreateCampaign ? 'Allowed' : 'Denied'}
+                          </span>
+                        </label>
+                      </td>
                       <td><span className={`status-badge status-${u.status}`}>{u.status}</span></td>
                       <td style={{ color: '#9aa3ae' }}>{u.joined}</td>
                       <td>
@@ -227,10 +282,21 @@ function AdminUsers() {
               </>
             )}
             {tab === 'brands' && (
-              <div className="admin-modal-field">
-                <label>Total Campaigns</label>
-                <span style={{ fontWeight: 600, color: '#6366f1' }}>{viewUser.campaigns}</span>
-              </div>
+              <>
+                <div className="admin-modal-field">
+                  <label>Total Campaigns</label>
+                  <span style={{ fontWeight: 600, color: '#6366f1' }}>{viewUser.campaigns}</span>
+                </div>
+                <div className="admin-modal-field">
+                  <label>Campaign Permission</label>
+                  <span style={{
+                    fontWeight: 600,
+                    color: viewUser.canCreateCampaign ? '#22c55e' : '#e53e3e'
+                  }}>
+                    {viewUser.canCreateCampaign ? 'Allowed' : 'Denied'}
+                  </span>
+                </div>
+              </>
             )}
             <button className="admin-action-btn primary" style={{ marginTop: 16 }} onClick={() => setViewUser(null)}>Close</button>
           </div>

@@ -1,10 +1,44 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { campaignsAPI } from '../services/api';
 import './form.css';
 
 const CreateCampaign = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // Permission gate: redirect unauthorized brands
+  if (!user || user.role !== 'brand') {
+    return (
+      <div className="form-page">
+        <div className="form-container" style={{ textAlign: 'center', padding: '3rem' }}>
+          <h2 style={{ color: '#e53e3e', marginBottom: '1rem' }}>Access Denied</h2>
+          <p style={{ color: '#666' }}>Only brand accounts can create campaigns.</p>
+          <button onClick={() => navigate('/login')} style={{ marginTop: '1rem', padding: '0.5rem 1.5rem', cursor: 'pointer', background: '#1a1a1a', color: '#fff', border: 'none', borderRadius: '8px' }}>
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user.canCreateCampaign) {
+    return (
+      <div className="form-page">
+        <div className="form-container" style={{ textAlign: 'center', padding: '3rem' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔒</div>
+          <h2 style={{ color: '#92400e', marginBottom: '0.5rem' }}>Campaign Creation Restricted</h2>
+          <p style={{ color: '#666', maxWidth: '400px', margin: '0 auto 1.5rem' }}>
+            Your account is not authorized to create campaigns. Please contact admin for approval.
+          </p>
+          <button onClick={() => navigate('/brand-dashboard')} style={{ padding: '0.5rem 1.5rem', cursor: 'pointer', background: '#1a1a1a', color: '#fff', border: 'none', borderRadius: '8px' }}>
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -12,9 +46,7 @@ const CreateCampaign = () => {
     cpm: '',
     totalBudget: '',
     minViewsForPayout: '',
-    currency: 'USD', // NEW: Added currency state
   });
-  //const [logo, setLogo] = useState(null); 
   const [sourceVideoUrls, setSourceVideoUrls] = useState(['']);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,16 +54,6 @@ const CreateCampaign = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  //Handle Logo Selection
-  const handleLogoChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.size > 2 * 1024 * 1024) { // 2MB Limit check
-      setError("Logo file size should be less than 2MB");
-      return;
-    }
-    setLogo(file);
   };
 
   const handleVideoUrlChange = (index, value) => {
@@ -69,8 +91,6 @@ const CreateCampaign = () => {
         CPM: parseFloat(formData.cpm),
         deposit: parseFloat(formData.totalBudget),
         minViewsForPayout: parseInt(formData.minViewsForPayout) || 0,
-        currency: formData.currency, // SENDING CURRENCY
-        //brandLogo: logo.name, // Usually you'd upload this to S3/Cloudinary first
       });
       navigate('/brand/dashboard');
     } catch (err) {
@@ -91,26 +111,7 @@ const CreateCampaign = () => {
         {error && <div style={{ background: 'rgba(220,53,69,0.1)', color: '#dc3545', border: '1px solid rgba(220,53,69,0.3)', borderRadius: '8px', padding: '0.75rem 1rem', marginBottom: '1rem', fontSize: '0.875rem' }}>{error}</div>}
 
         <form className="campaign-form" onSubmit={handleSubmit}>
-          {/* 2. CURRENCY (Requirement: Select currency) */}
-          <div className="form-group">
-            <label htmlFor="currency" className="form-label">Campaign Currency <span className="required">*</span></label>
-            <select
-              id="currency"
-              name="currency"
-              className="form-input"
-              value={formData.currency}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="GBP">GBP (£)</option>
-              <option value="PKR">PKR (Rs)</option>
-              <option value="INR">INR (₹)</option>
-            </select>
-          </div>
-
-          {/* Campaign Title
+          {/* Campaign Title */}
           <div className="form-group">
             <label htmlFor="title" className="form-label">
               Campaign Title <span className="required">*</span>
@@ -126,7 +127,7 @@ const CreateCampaign = () => {
               required
               minLength={5}
             />
-          </div> */}
+          </div>
 
           {/* Description */}
           <div className="form-group">
@@ -190,26 +191,6 @@ const CreateCampaign = () => {
               required
             />
           </div>
-
-          {/* CurrencySelection */}
-          <div className="form-group">
-            <label htmlFor="currency" className="form-label">Campaign Currency <span className="required">*</span></label>
-            <select
-              id="currency"
-              name="currency"
-              className="form-input"
-              value={formData.currency}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="GBP">GBP (£)</option>
-              <option value="PKR">PKR (Rs)</option>
-              <option value="INR">INR (₹)</option>
-            </select>
-          </div>
-
 
           {/* CPM */}
           <div className="form-group">
